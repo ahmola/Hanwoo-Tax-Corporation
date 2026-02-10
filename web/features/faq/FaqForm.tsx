@@ -1,14 +1,14 @@
-import { SERVICE_ITEMS } from "@/features/servicees/Constants";
+import { FAQ_ITEMS } from "@/features/faq/Constants";
 
-export default function ServiceForm() {
+export default function FaqForm() {
     return (
     <section id="services" className="container mx-auto px-4">
       <h2 className="head2-primary">
-        주요 서비스
+        자주 묻는 질문
       </h2>
       
       <div className="grid md:grid-cols-3 gap-8">
-        {SERVICE_ITEMS.map((item, idx) => (
+        {FAQ_ITEMS.map((item, idx) => (
           <div 
             key={idx} 
             className="p-6 border rounded-xl hover:shadow-lg transition bg-white group hover:-translate-y-1 duration-300"
