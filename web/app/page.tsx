@@ -1,6 +1,10 @@
 // 메인 홈페이지
 import ContactForm from "@/features/contact/ContactForm";
+import DocumentsForm from "@/features/documents/DocumentsForm";
+import FaqForm from "@/features/faq/FaqForm";
 import HeroForm from "@/features/hero/HeroForm";
+import LocationForm from "@/features/location/LocationForm";
+import NoticeForm from "@/features/notice/NoticeForm";
 import ServiceForm from "@/features/servicees/ServiceForm";
 
 export default function Home() {
@@ -13,12 +17,16 @@ export default function Home() {
       <ServiceForm />
 
       {/* Notice Section */}
+      <NoticeForm />
 
       {/* Documents Section */}
+      <DocumentsForm />
 
       {/* FAQ Section */}
+      <FaqForm />
 
       {/* Location Section */}
+      <LocationForm />
 
       {/* Contact Section */}
       <ContactForm />
