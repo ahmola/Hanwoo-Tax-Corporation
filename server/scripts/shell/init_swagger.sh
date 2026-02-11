@@ -1,0 +1,1 @@
+swag init -g main.go -d main,internal --output main/docs --parseDependency --parseInternal
