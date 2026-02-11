@@ -8,8 +8,6 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +21,34 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer components {
+  .h1-primary {
+    @apply text-3xl font-bold mb-6 text-white
+  }
+  .menu-text {
+    @apply flex items-center gap-3 p-3 hover:bg-slate-800 rounded
+  }
+  .table-primary {
+    @apply max-w-4xl mx-auto
+  }
+  .table-head-name {
+    @apply text-2xl font-bold mb-6 text-black
+  }
+  .date-primary {
+    @apply p-3 text-sm text-slate-500 
+  }
+  .table-element {
+    @apply p-3 font-bold text-black
+  }
+  .table-text {
+    @apply p-3 truncate max-w-xs text-black
+  }
+  .table-input{
+    @apply w-full border p-3 rounded text-black
+  }
+  .table-button {
+    @apply w-full bg-blue-600 text-white py-3 rounded font-bold hover:bg-blue-700
+  }
 }
