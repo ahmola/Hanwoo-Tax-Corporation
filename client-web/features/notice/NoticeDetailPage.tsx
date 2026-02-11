@@ -1,10 +1,10 @@
-import { NOTICE_ITEMS } from "./Constants";
+import { getNotices } from "./services";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Calendar } from "lucide-react";
 
-export default function NoticeDetailForm({ id }: { id: string }) {
-  const notice = NOTICE_ITEMS.find((item) => item.id === Number(id));
+export default async function NoticeDetailForm({ id }: { id: string }) {
+  const notice = (await getNotices()).find((item) => item.id === Number(id));
 
   if (!notice) notFound();
 

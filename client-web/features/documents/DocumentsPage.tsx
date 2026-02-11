@@ -2,14 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { DOCUMENT_ITEMS } from "@/features/documents/Constants";
+import { getDocuments } from "./services";
 import { Search, FolderOpen, ArrowLeft, Download, FileText } from "lucide-react";
 
-export default function DocumentsPage() {
+export default async function DocumentsPage() {
   const [searchTerm, setSearchTerm] = useState("");
+  const documents = await getDocuments();
 
   // 검색 필터링
-  const filteredItems = DOCUMENT_ITEMS.filter((item) =>
+  const filteredItems = documents.filter((item) =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 

@@ -1,15 +1,16 @@
 'use client' // 검색 기능 등 인터랙션을 위해 클라이언트 컴포넌트로 지정
 
 import Link from "next/link";
-import { NOTICE_ITEMS } from "./Constants";
+import { getNotices } from "./services";
 import { Search, ChevronRight, Megaphone, Calendar, Tag } from "lucide-react";
 import { useState } from "react";
 
-export default function NoticePage() {
+export default async function NoticePage() {
   const [searchTerm, setSearchTerm] = useState("");
+  const notices = await getNotices();
 
   // 검색어 필터링 로직 (제목으로 검색)
-  const filteredItems = NOTICE_ITEMS.filter((item) =>
+  const filteredItems = notices.filter((item) =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 

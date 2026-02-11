@@ -7,7 +7,7 @@ export interface NoticeItem {
   content: string; // 본문 내용 추가
 }
 
-// API 개발 전 임시용
+// API 개발 전 더미 데이터
 export const NOTICE_ITEMS: NoticeItem[] = [
   {
     id: 1,
