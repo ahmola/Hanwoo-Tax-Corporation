@@ -1,9 +1,7 @@
-package contact
-
-import "github.com/ahmola/Hanwoo-Tax-Corporation/pkg/common"
+package models
 
 type Contact struct {
-	common.BaseEntity
+	BaseEntity
 	Name    string `json:"name"`
 	Phone   string `json:"phone"`
 	Message string `json:"message"`

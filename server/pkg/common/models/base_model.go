@@ -1,4 +1,4 @@
-package common
+package models
 
 type BaseEntity struct {
 	ID        uint64 `json:"id" gorm:"primaryKey"`
