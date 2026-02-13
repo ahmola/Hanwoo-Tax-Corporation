@@ -1,9 +1,7 @@
-package notice
-
-import "github.com/ahmola/Hanwoo-Tax-Corporation/pkg/common"
+package models
 
 type Notice struct {
-	common.BaseEntity
+	BaseEntity
 	Title       string `json:"title"`
 	Content     string `json:"content"`
 	Category    string `json:"category"`
