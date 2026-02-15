@@ -1,38 +1,98 @@
 package handlers
 
 import (
+	"log/slog"
+
+	errors "github.com/ahmola/Hanwoo-Tax-Corporation/pkg/common/errors"
 	models "github.com/ahmola/Hanwoo-Tax-Corporation/pkg/common/models"
 	services "github.com/ahmola/Hanwoo-Tax-Corporation/pkg/common/services"
+	"github.com/gin-gonic/gin"
 )
 
 type ContactHandler struct {
 	Svc *services.ContactService
 }
 
-func (hdl *ContactHandler) CreateContact(contact *models.Contact) error {
-	return hdl.Svc.CreateContact(contact)
+var contactHandlerName = "ContactHandler"
+
+func (hdl *ContactHandler) CreateContact(c *gin.Context) {
+	var functionName = "CreateContact"
+	var req models.Contact
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": errors.CommitError(contactHandlerName, functionName,
+			"error occured during extracting request", err)})
+		return
+	}
+
+	res, err := hdl.Svc.CreateContact(&req)
+	if err != nil {
+		c.JSON(500, gin.H{"error": errors.CommitError(contactHandlerName, functionName,
+			"error occured during creating contact", err)})
+		return
+	}
+
+	c.JSON(201, res)
 }
 
-func (hdl *ContactHandler) GetCotectsByID(id uint) (*models.Contact, error) {
-	return hdl.Svc.GetContectsByID(id)
+func (hdl *ContactHandler) GetAllContacts(c *gin.Context) {
+	var functionName = "GetAllContacts"
+
+	res, err := hdl.Svc.GetAllContacts()
+	if err != nil {
+		c.JSON(500, gin.H{"error": errors.CommitError(documentHandlerName, functionName,
+			"error occured during reading documents", err)})
+		return
+	}
+
+	c.JSON(200, res)
 }
 
-func (hdl *ContactHandler) GetContactsByName(name string) ([]models.Contact, error) {
-	return hdl.Svc.GetContactsByName(name)
+func (hdl *ContactHandler) GetCotactsByID(c *gin.Context) {
+	var functionName = "GetContactsByID"
+	id := c.Param("id")
+	slog.Info("ContactId: ", id)
+
+	contact, err := hdl.Svc.GetContactsByID(id)
+	if err != nil {
+		c.JSON(500, gin.H{"error": errors.CommitError(contactHandlerName, functionName,
+			"error occured during reading contacts", err)})
+		return
+	}
+
+	c.JSON(200, contact)
 }
 
-func (hdl *ContactHandler) GetContactsByPhone(phone string) ([]models.Contact, error) {
-	return hdl.Svc.GetContactsByPhone(phone)
+func (hdl *ContactHandler) UpdateContact(c *gin.Context) {
+	var functionName = "UpdateContact"
+	var req models.Contact
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": errors.CommitError(contactHandlerName, functionName,
+			"error occured during extracting request", err)})
+		return
+	}
+
+	res, err := hdl.Svc.UpdateContact(&req)
+	if err != nil {
+		c.JSON(500, gin.H{"error": errors.CommitError(contactHandlerName, functionName,
+			"error occured during updating contacts", err)})
+		return
+	}
+
+	c.JSON(200, res)
 }
 
-func (hdl *ContactHandler) GetContactsByMessage(message string) ([]models.Contact, error) {
-	return hdl.Svc.GetContactsByMessage(message)
-}
+func (hdl *ContactHandler) DeleteContact(c *gin.Context) {
+	var functionName = "deletieContact"
+	id := c.Param("id")
 
-func (hdl *ContactHandler) UpdateContact(contact *models.Contact) error {
-	return hdl.Svc.UpdateContact(contact)
-}
+	err := hdl.Svc.DeleteContact(id)
+	if err != nil {
+		c.JSON(500, gin.H{"error": errors.CommitError(contactHandlerName, functionName,
+			"error occured during deleting contact", err)})
+		return
+	}
 
-func (hdl *ContactHandler) DeleteContact(id uint) error {
-	return hdl.Svc.DeleteContact(id)
+	c.JSON(200, true)
 }
