@@ -10,11 +10,11 @@ import (
 	dbs "github.com/ahmola/Hanwoo-Tax-Corporation/pkg/common/dbs"
 )
 
-// @title				User API
-// @version				2.0
+// @title				Admin API
+// @version				1.0
 // @description			API built with Gin
 // @host				localhost:8081
-// @BasePath			/api/v2
+// @BasePath			/api/v1
 func main() {
 	// log init
 	logHandler := slog.NewJSONHandler(os.Stdout, nil)
@@ -27,20 +27,36 @@ func main() {
 
 	// Gin init
 	slog.Info("Gin Init")
-	r := gin.Default()
+
+	// health check router
+	healthRouter := gin.New()
+	healthRouter.GET("/health", func(c *gin.Context) {
+		// DB Connection Check
+		database, _ := dbs.DB.DB()
+		if err := database.Ping(); err != nil {
+			c.JSON(500, gin.H{"status": "unhealth", "reason": "db connection failed"})
+			return
+		}
+
+		c.JSON(200, gin.H{"status": "ok"})
+	})
 
 	// v1 Group
-	v1 := r.Group("/api/v1/admin")
+	mainRounter := gin.Default()
+	v1 := mainRounter.Group("/api/v1/admin")
 	slog.Info("Define Routes : version 1")
 	{
 		// Notice
 		v1.POST("/notice", noticeHdl.CreateNotice)
+		v1.DELETE("/notice/:id", noticeHdl.DeleteNotice)
 
 		// Document
 		v1.POST("/document", documentHdl.CreateDocument)
+		v1.DELETE("document", documentHdl.DeleteDocument)
 
 		// Contact
-		v1.GET("/contact", contactHdl.GetCotectsByID)
+		v1.GET("/contact/all", contactHdl.GetAllContacts)
+		v1.GET("/contact", contactHdl.GetCotactsByID)
 	}
 
 	// Server Init
@@ -50,7 +66,13 @@ func main() {
 	}
 	slog.Info("Check Environment Variable and port : ", "SERVER_PORT", port)
 
-	if err := r.Run(port); err != nil {
+	go func() {
+		if err := healthRouter.Run(":9090"); err != nil {
+			slog.Error("Health Check Failed: %v", err)
+		}
+	}()
+
+	if err := mainRounter.Run(port); err != nil {
 		slog.Error("Gin Server failed to start", "error", err)
 	}
 }

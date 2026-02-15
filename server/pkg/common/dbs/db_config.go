@@ -14,6 +14,8 @@ import (
 	services "github.com/ahmola/Hanwoo-Tax-Corporation/pkg/common/services"
 )
 
+var DB *gorm.DB
+
 func DBConfig(serviceName string) *gorm.DB {
 	// MySQL 주소
 	// Compose의 환경변수에서 가져옴
@@ -24,7 +26,6 @@ func DBConfig(serviceName string) *gorm.DB {
 	slog.Info("DB Destination : ", destination)
 
 	// 데이터베이스 연결
-	var DB *gorm.DB
 	var err error
 
 	slog.Info("Start Connection")

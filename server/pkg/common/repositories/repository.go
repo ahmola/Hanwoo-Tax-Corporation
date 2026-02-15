@@ -27,10 +27,10 @@ type GormRepository[T any] struct {
 }
 
 func (r *GormRepository[T]) Create(entity *T) error {
-	return r.DB.Create(entity).Error
+	return r.DB.Create(&entity).Error
 }
 
-func (r *GormRepository[T]) FindByID(id uint) (*T, error) {
+func (r *GormRepository[T]) FindByID(id uint64) (*T, error) {
 	var entity T
 	err := r.DB.First(&entity, id).Error
 	return &entity, err
@@ -43,10 +43,10 @@ func (r *GormRepository[T]) FindAll() ([]*T, error) {
 }
 
 func (r *GormRepository[T]) Update(entity *T) error {
-	return r.DB.Save(entity).Error
+	return r.DB.Save(&entity).Error
 }
 
-func (r *GormRepository[T]) Delete(id uint) error {
+func (r *GormRepository[T]) Delete(id uint64) error {
 	var entity T
 	return r.DB.Delete(&entity, id).Error
 }

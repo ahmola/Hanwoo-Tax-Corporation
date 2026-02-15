@@ -1,38 +1,94 @@
 package handlers
 
 import (
+	errors "github.com/ahmola/Hanwoo-Tax-Corporation/pkg/common/errors"
 	models "github.com/ahmola/Hanwoo-Tax-Corporation/pkg/common/models"
 	services "github.com/ahmola/Hanwoo-Tax-Corporation/pkg/common/services"
+	"github.com/gin-gonic/gin"
 )
 
 type NoticeHandler struct {
 	Svc *services.NoticeService
 }
 
-func (hdl *NoticeHandler) CreateNotice(notice *models.Notice) error {
-	return hdl.Svc.CreateNotice(notice)
+var noticeHandlerName = "NoticeHandler"
+
+func (hdl *NoticeHandler) CreateNotice(c *gin.Context) {
+	var req models.Notice
+	var functionName = "CreateNotice"
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": errors.CommitError(noticeHandlerName, functionName,
+			"error occured during extracting request", err)})
+		return
+	}
+
+	res, err := hdl.Svc.CreateNotice(&req)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(201, res)
 }
 
-func (hdl *NoticeHandler) GetNoticesByTitle(title string) ([]models.Notice, error) {
-	return hdl.Svc.GetNoticesByTitle(title)
+func (hdl *NoticeHandler) GetAllNotices(c *gin.Context) {
+	var functionName = "GetAllNotices"
+
+	res, err := hdl.Svc.GetAllNotices()
+	if err != nil {
+		c.JSON(500, gin.H{"error": errors.CommitError(noticeHandlerName, functionName,
+			"error occured during reading notices", err)})
+		return
+	}
+
+	c.JSON(200, res)
 }
 
-func (hdl *NoticeHandler) GetNoticesByContent(content string) ([]models.Notice, error) {
-	return hdl.Svc.GetNoticesByContent(content)
+func (hdl *NoticeHandler) GetNoticeByID(c *gin.Context) {
+	var functionName = "GetNoticeByID"
+	id := c.Param("id")
+
+	res, err := hdl.Svc.GetNoticeByID(id)
+	if err != nil {
+		c.JSON(500, gin.H{"error": errors.CommitError(noticeHandlerName, functionName,
+			"error occured during reading notice", err)})
+		return
+	}
+
+	c.JSON(200, res)
 }
 
-func (hdl *NoticeHandler) GetNoticesByCategory(category string) ([]models.Notice, error) {
-	return hdl.Svc.GetNoticesByCategory(category)
+func (hdl *NoticeHandler) UpdateNotice(c *gin.Context) {
+	var req models.Notice
+	var functionName = "UpdateNotice"
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": errors.CommitError(noticeHandlerName, functionName,
+			"error occured during extracting request", err)})
+		return
+	}
+
+	res, err := hdl.Svc.UpdateNotice(&req)
+	if err != nil {
+		c.JSON(500, gin.H{"error": errors.CommitError(noticeHandlerName, functionName,
+			"error occured during updating notice", err)})
+		return
+	}
+
+	c.JSON(200, res)
+
 }
 
-func (hdl *NoticeHandler) GetNoticesByIsImportant(isImportant bool) ([]models.Notice, error) {
-	return hdl.Svc.GetNoticesByIsImportant(isImportant)
-}
+func (hdl *NoticeHandler) DeleteNotice(c *gin.Context) {
+	var functionName = "deleteNotice"
+	id := c.Param("id")
 
-func (hdl *NoticeHandler) UpdateNotice(notice *models.Notice) error {
-	return hdl.Svc.UpdateNotice(notice)
-}
+	if err := hdl.Svc.DeleteNotice(id); err != nil {
+		c.JSON(500, errors.CommitError(noticeHandlerName, functionName,
+			"error occured during deleting notice", err))
+		return
+	}
 
-func (hdl *NoticeHandler) DeleteNotice(id uint) error {
-	return hdl.Svc.DeleteNotice(id)
+	c.JSON(200, true)
 }
