@@ -7,6 +7,8 @@ import LocationForm from "@/features/location/LocationForm";
 import NoticeForm from "@/features/notice/NoticeForm";
 import ServiceForm from "@/features/servicees/ServiceForm";
 
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
   return (
     <div className="flex flex-col gap-20 pb-20">

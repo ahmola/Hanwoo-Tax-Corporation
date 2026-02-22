@@ -9,8 +9,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLE=0 GOOS=linux go build -p 1 -o main ./client/main
-RUN CGO_ENABLE=0 GOOS=linux go build -o health_checker ./pkg/common/healthcheck/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -p 1 -o main ./client/main
 
 # Run Stage
 FROM alpine:latest
@@ -18,11 +17,10 @@ FROM alpine:latest
 WORKDIR /app
 
 COPY --from=builder /app/main .
-COPY --from=builder /app/health_checker /usr/local/bin/health_checker
 
-EXPOSE 8082 9090
+EXPOSE 8082
 
 HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
-    CMD [ "executable" ]
+    CMD ["/usr/local/bin/health_checker" ]
 
 CMD ["./main"]

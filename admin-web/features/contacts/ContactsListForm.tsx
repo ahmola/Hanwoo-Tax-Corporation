@@ -1,13 +1,14 @@
 'use client'
 
 import { useEffect, useState } from "react";
+import { getContacts } from "@/app/actions/contactActions";
 
 interface Contact {
   id: number;
   name: string;
   phone: string;
   message: string;
-  createdAt: string;
+  created_at: string;
 }
 
 export default function ContactsList() {
@@ -15,10 +16,15 @@ export default function ContactsList() {
 
   // 페이지 로드 시 API 서버에서 목록 가져오기
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/contacts`)
-      .then(res => res.json())
-      .then(data => setList(data))
-      .catch(err => console.error("데이터 로드 실패", err));
+    const fetchList = async () => {
+      const data = await getContacts();
+
+      setList(data);
+    };
+
+    fetchList().then(data => {
+      console.log(data);
+    });
   }, []);
 
   return (
@@ -36,7 +42,7 @@ export default function ContactsList() {
         <tbody>
           {list.map((item) => (
             <tr key={item.id} className="border-b hover:bg-slate-50">
-              <td className="date-primary">{item.createdAt}</td>
+              <td className="date-primary">{item.created_at}</td>
               <td className="table-element">{item.name}</td>
               <td className="table-element">{item.phone}</td>
               <td className="table-text">{item.message}</td>

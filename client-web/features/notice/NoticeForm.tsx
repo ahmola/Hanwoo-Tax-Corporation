@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ChevronRight, Megaphone } from "lucide-react";
-import { getNotices } from "./services";
+import { getNotices } from "@/app/actions/noticeActions";
 
 export default async function NoticeForm() {
   const notices = await getNotices();

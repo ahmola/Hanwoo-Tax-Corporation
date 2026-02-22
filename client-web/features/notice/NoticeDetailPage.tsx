@@ -1,4 +1,4 @@
-import { getNotices } from "./services";
+import { getNotices } from "@/app/actions/noticeActions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Calendar } from "lucide-react";

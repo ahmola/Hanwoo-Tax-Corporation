@@ -1,4 +1,6 @@
-import { DocumentItem } from "./Constants";
+'use server'
+
+import { DocumentItem } from "@/features/documents/Constants";
 
 export async function getDocuments(): Promise<DocumentItem[]> {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -10,7 +12,7 @@ export async function getDocuments(): Promise<DocumentItem[]> {
 
     try {
         const res = await fetch(`${apiUrl}/documents`, {
-            next : {revalidate: 60*60*24} // 24시간마다 갱신
+            cache: 'no-store'
         });
 
         if (!res.ok) {
