@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FileText, Download, ChevronRight, FolderOpen } from "lucide-react";
-import { getDocuments } from "./services";
+import { getDocuments } from "@/app/actions/documentActions";
 
 export default async function DocumentsForm() {
   const documents = await getDocuments();

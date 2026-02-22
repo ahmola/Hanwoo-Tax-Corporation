@@ -1,7 +1,7 @@
 'use client' // 검색 기능 등 인터랙션을 위해 클라이언트 컴포넌트로 지정
 
 import Link from "next/link";
-import { getNotices } from "./services";
+import { getNotices } from "@/app/actions/noticeActions";
 import { Search, ChevronRight, Megaphone, Calendar, Tag } from "lucide-react";
 import { useState } from "react";
 

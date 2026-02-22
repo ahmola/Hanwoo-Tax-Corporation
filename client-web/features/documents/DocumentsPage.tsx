@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { getDocuments } from "./services";
+import { getDocuments } from "@/app/actions/documentActions";
 import { Search, FolderOpen, ArrowLeft, Download, FileText } from "lucide-react";
 
 export default async function DocumentsPage() {

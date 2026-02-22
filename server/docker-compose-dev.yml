@@ -19,7 +19,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-      start_period: 15s
+      start_period: 5s
   
   admin-serivce:
     depends_on:
@@ -31,7 +31,6 @@ services:
     container_name: admin-service
     ports:
       - "8081:8081"
-      - "9090:9090"
     environment:
       DB_DSN: "root:1234@tcp(mysql:3306)/service?charset=utf8mb4&parseTime=True&loc=Local"
       SERVER_PORT: ":8081"
@@ -42,22 +41,18 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      admin-serivce:
-        condition: service_healthy
     build:
       context: .
       dockerfile: ./client/Dockerfile
     container_name: client-service
     ports:
       - "8082:8082"
-      - "9090:9090"
     environment:
       DB_DSN: "root:1234@tcp(mysql:3306)/service?charset=utf8mb4&parseTime=True&loc=Local"
       SERVER_PORT: ":8082"
     networks:
       - service-network
 
-  
 networks:
   service-network:
     driver: bridge

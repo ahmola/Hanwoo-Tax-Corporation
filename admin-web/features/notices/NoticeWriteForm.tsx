@@ -1,5 +1,6 @@
 'use client'
 
+import { uploadNotice } from "@/app/actions/noticeActions";
 import { useState } from "react";
 
 export default function NoticeWriteForm() {
@@ -7,20 +8,17 @@ export default function NoticeWriteForm() {
     title: "",
     category: "공지", // 기본값
     content: "",
-    isImportant: false,
+    is_important: false,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // API 서버로 POST 요청
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notices`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    console.log(formData)
+    const res = await uploadNotice(formData);
 
-    if (res.ok) {
+    if (res.success) {
       alert("공지사항이 등록되었습니다.");
       // 입력창 초기화 or 목록으로 이동 로직
     } else {
@@ -46,8 +44,8 @@ export default function NoticeWriteForm() {
         <label className="flex items-center gap-2 text-red-500">
           <input 
             type="checkbox" 
-            checked={formData.isImportant}
-            onChange={e => setFormData({...formData, isImportant: e.target.checked})}
+            checked={formData.is_important}
+            onChange={e => setFormData({...formData, is_important: e.target.checked})}
           />
           중요 공지
         </label>

@@ -28,8 +28,11 @@ func main() {
 	// Gin init
 	slog.Info("Gin Init")
 
-	healthRouter := gin.New()
-	healthRouter.GET("/health", func(c *gin.Context) {
+	// v1 Group
+	mainRounter := gin.Default()
+
+	// health check
+	mainRounter.GET("/health", func(c *gin.Context) {
 		// DB Connection Check
 		database, _ := dbs.DB.DB()
 		if err := database.Ping(); err != nil {
@@ -40,8 +43,6 @@ func main() {
 		c.JSON(200, gin.H{"status": "ok"})
 	})
 
-	// v1 Group
-	mainRounter := gin.Default()
 	v1 := mainRounter.Group("/api/v1/client")
 	slog.Info("Define Routes : version 1")
 	{
@@ -63,12 +64,6 @@ func main() {
 		port = ":8080"
 	}
 	slog.Info("Check Environment Variable and port : ", "SERVER_PORT", port)
-
-	go func() {
-		if err := healthRouter.Run(":9090"); err != nil {
-			slog.Error("Health Check Failed: %v", err)
-		}
-	}()
 
 	if err := mainRounter.Run(port); err != nil {
 		slog.Error("Gin Server failed to start", "error", err)

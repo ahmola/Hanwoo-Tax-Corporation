@@ -1,64 +1,78 @@
-# services:
-#   mysql:
-#     environment:
-#       - MYSQL_ROOT_PASSWORD=1234
-#     image: mysql:8.2.0
-#     container_name: mysql
-#     command:
-#       - --character-set-server=utf8mb4
-#       - --collation-server=utf8mb4_unicode_ci
-#     restart: always
-#     ports:
-#       - "3306:3306"
-#     volumes:
-#       - ./scripts/sql:/docker-entrypoint-initdb.d
-#     networks:
-#       - service-network
-#     healthcheck:
-#       test: ["CMD", "mysqladmin", "ping", "-h", "mysql", "-u", "root", "--password=1234"]
-#       interval: 5s
-#       timeout: 5s
-#       retries: 10
-#       start_period: 15s
-  
-#   admin-serivce:
-#     depends_on:
-#       mysql:
-#         condition: service_healthy
-#     build:
-#       context: .
-#       dockerfile: ./admin/Dockerfile
-#     container_name: admin-service
-#     ports:
-#       - "8081:8081"
-#     environment:
-#       DB_DSN: "root:1234@tcp(mysql:3306)/service?charset=utf8mb4&parseTime=True&loc=Local"
-#       SERVER_PORT: ":8081"
-#     networks:
-#       - service-network
-  
-#   client-service:
-#     depends_on:
-#       mysql:
-#         condition: service_healthy
-#       admin-serivce:
-#         condition: service_healthy
-#     build:
-#       context: .
-#       dockerfile: ./client/Dockerfile
-#     container_name: client-service
-#     ports:
-#       - "8082:8082"
-#     environment:
-#       DB_DSN: "root:1234@tcp(mysql:3306)/service?charset=utf8mb4&parseTime=True&loc=Local"
-#       SERVER_PORT: ":8082"
-#     networks:
-#       - service-network
+services:
+  client-web:
+    build:
+      context: ./client-web
+      dockerfile: Dockerfile
+    container_name: client-web
+    ports:
+      - "3000:3000"
+    networks:
+      - service-network
 
-#   admin-web:
-#     depends_on:
+  admin-web:
+    build:
+      context: ./admin-web
+      dockerfile: Dockerfile
+    container_name: admin-web
+    ports:
+      - "3001:3000"
+    networks:
+      - service-network
 
+  mysql:
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+    image: mysql:8.2.0
+    container_name: mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./server/scripts/sql:/docker-entrypoint-initdb.d
+    networks:
+      - service-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql", "-u", "root", "--password=1234"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
   
-# networks:
-#   service-network:
-#     driver: bridge
+  admin-service:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    build:
+      context: ./server
+      dockerfile: ./admin/Dockerfile
+    container_name: admin-service
+    ports:
+      - "8081:8081"
+    environment:
+      DB_DSN: "root:1234@tcp(mysql:3306)/service?charset=utf8mb4&parseTime=True&loc=Local"
+      SERVER_PORT: ":8081"
+    networks:
+      - service-network
+  
+  client-service:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    build:
+      context: ./server
+      dockerfile: ./client/Dockerfile
+    container_name: client-service
+    ports:
+      - "8082:8082"
+    environment:
+      DB_DSN: "root:1234@tcp(mysql:3306)/service?charset=utf8mb4&parseTime=True&loc=Local"
+      SERVER_PORT: ":8082"
+    networks:
+      - service-network
+  
+networks:
+  service-network:
+    driver: bridge

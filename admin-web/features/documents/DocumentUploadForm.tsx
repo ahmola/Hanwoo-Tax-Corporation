@@ -1,5 +1,6 @@
 'use client'
 
+import { uploadDocument } from "@/app/actions/documentActions";
 import { useState } from "react";
 
 export default function DocumentUploadForm() {
@@ -15,12 +16,9 @@ export default function DocumentUploadForm() {
     formData.append("file", file); // 백엔드에서 받을 필드명 'file'
 
     // API 서버로 파일 전송
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents`, {
-      method: "POST",
-      body: formData, // JSON.stringify 하지 않음!
-    });
+    const res = await uploadDocument(formData);
 
-    if (res.ok) {
+    if (res.success) {
       alert("업로드 완료");
     } else {
       alert("업로드 실패");

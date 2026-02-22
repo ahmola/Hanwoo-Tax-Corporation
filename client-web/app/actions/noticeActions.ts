@@ -1,4 +1,6 @@
-import { NoticeItem } from "./Constants";
+'use server'
+
+import { NoticeItem } from "@/features/notice/Constants";
 
 export async function getNotices(): Promise<NoticeItem[]> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -10,7 +12,7 @@ export async function getNotices(): Promise<NoticeItem[]> {
 
   try {
     const res = await fetch(`${apiUrl}/notices`, {
-        next: { revalidate: 60 * 60 * 24} // 24시간마다 캐시 갱신
+        cache: 'no-store'
     });
 
     if (!res.ok) {

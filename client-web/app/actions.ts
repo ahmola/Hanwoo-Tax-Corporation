@@ -1,4 +1,3 @@
-// 임시 백엔드
 'use server'
 
 import { Resend } from "resend";
@@ -32,6 +31,25 @@ export async function submitConsultation(formData: FormData) {
   }catch (error) {
     console.error("메일 발송 실패", error);
     return { success: false, error: "상담 신청 실패"}
+  }
+
+  // 2. 접수 사항을 서버로 전달
+  try{
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contacts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "name": name,
+          "phone": phone,
+          "message": message,
+        }),
+      }
+    )
+  }catch (error) {
+    console.error("접수 내역 서버로 업로드 실패", error);
+    return {success: false, error: "업로드 실패"}
   }
   
   return { success: true, message: "상담이 접수되었습니다." };
