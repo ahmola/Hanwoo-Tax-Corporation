@@ -1,10 +1,11 @@
 'use client'
 
-import { uploadDocument } from "@/app/actions/documentActions";
+import { uploadDocument} from "@/app/actions/documentActions";
 import { useState } from "react";
 
 export default function DocumentUploadForm() {
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
   const [file, setFile] = useState<File | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -13,15 +14,16 @@ export default function DocumentUploadForm() {
 
     const formData = new FormData();
     formData.append("title", title);
-    formData.append("file", file); // 백엔드에서 받을 필드명 'file'
+    formData.append("file", file);
+    formData.append("category", category);
 
-    // API 서버로 파일 전송
+    // static resource 서버에 문서를 저장 완료하면 url과 각종 정보를 API 서버로 전송
     const res = await uploadDocument(formData);
 
     if (res.success) {
-      alert("업로드 완료");
+      alert("파일 정보 업로드 완료");
     } else {
-      alert("업로드 실패");
+      alert("파일 정보 업로드 실패");
     }
   };
 
@@ -34,6 +36,13 @@ export default function DocumentUploadForm() {
         placeholder="자료 제목"
         value={title}
         onChange={e => setTitle(e.target.value)}
+      />
+
+      <input 
+        className="table-input" 
+        placeholder="카테고리"
+        value={category}
+        onChange={e => setCategory(e.target.value)}
       />
 
       <input 

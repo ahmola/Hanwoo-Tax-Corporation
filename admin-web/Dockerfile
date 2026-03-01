@@ -17,5 +17,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
+RUN mkdir -p /usr/share/next-resources && chmod 777 /usr/share/next-resources
+
 EXPOSE 3001
 CMD ["node", "server.js"]
