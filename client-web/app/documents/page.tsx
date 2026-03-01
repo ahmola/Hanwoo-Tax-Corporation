@@ -1,7 +1,5 @@
 import DocumentsPage from "@/features/documents/DocumentsPage";
 
-export const dynamic = 'force-dynamic';
-
-export default function Page(){
+export default async function Page(){
     return <DocumentsPage />;
 }

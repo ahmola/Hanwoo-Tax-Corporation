@@ -1,5 +1,5 @@
 import NoticePage from "@/features/notice/NoticePage";
 
-export default function Page() {
+export default async function Page() {
     return <NoticePage />;
 }

@@ -1,13 +1,19 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getDocuments } from "@/app/actions/documentActions";
 import { Search, FolderOpen, ArrowLeft, Download, FileText } from "lucide-react";
+import { DocumentItem } from "./Constants";
 
-export default async function DocumentsPage() {
+export default  function DocumentsPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const documents = await getDocuments();
+  const [documents, setDocuments] = useState<DocumentItem[]>([]);
+
+  useEffect(()=> {
+    getDocuments().then(res => setDocuments(res));
+  })
+  
 
   // 검색 필터링
   const filteredItems = documents.filter((item) =>
