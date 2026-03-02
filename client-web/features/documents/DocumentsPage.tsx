@@ -2,16 +2,19 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getDocuments } from "@/app/actions/documentActions";
+import { getDocumentsInfo } from "@/app/actions/documentActions";
 import { Search, FolderOpen, ArrowLeft, Download, FileText } from "lucide-react";
 import { DocumentItem } from "./Constants";
+import DownloadButton from "./DownloadDocumentButton";
 
 export default  function DocumentsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
+  const RESOURCE_ADDRESS = process.env.NEXT_PUBLIC_RESOURCE_URL;
+
 
   useEffect(()=> {
-    getDocuments().then(res => setDocuments(res));
+    getDocumentsInfo().then(res => setDocuments(res));
   })
   
 
@@ -77,14 +80,7 @@ export default  function DocumentsPage() {
                 </div>
 
                 {/* 다운로드 버튼 */}
-                <a 
-                  href={item.fileUrl}
-                  download
-                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-blue-600 hover:text-white transition font-semibold text-sm flex-shrink-0 ml-4"
-                >
-                  <Download className="w-4 h-4" />
-                  <span className="hidden md:inline">다운로드</span>
-                </a>
+                <DownloadButton fileUrl={item.file_url} title={item.title}/>
               </div>
             ))
           ) : (
