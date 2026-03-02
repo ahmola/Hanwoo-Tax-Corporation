@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { FileText, Download, ChevronRight, FolderOpen } from "lucide-react";
-import { getDocuments } from "@/app/actions/documentActions";
+import { getDocumentsInfo } from "@/app/actions/documentActions";
+import DownloadButton from "./DownloadDocumentButton";
 
 export default async function DocumentsForm() {
-  const documents = await getDocuments();
+  const documents = await getDocumentsInfo();
   const recentDocuments = documents.slice(0, 5);
 
   return (
@@ -30,7 +31,7 @@ export default async function DocumentsForm() {
       {/* 리스트 (최근 4개) */}
       <div className="grid md:grid-cols-2 gap-4">
         {recentDocuments.length > 0 ? (
-          documents.map((item) => (
+          recentDocuments.map((item) => (
             <div
               key={item.id}
               className="group flex items-center justify-between p-5 bg-white border rounded-xl hover:border-blue-300 hover:shadow-md transition duration-200"
@@ -50,14 +51,7 @@ export default async function DocumentsForm() {
               </div>
 
               {/* 다운로드 버튼 (실제 다운로드는 a 태그 사용) */}
-              <a 
-                href={item.fileUrl} 
-                download 
-                className="p-2 text-slate-400 hover:text-blue-700 hover:bg-slate-100 rounded-full transition ml-2 flex-shrink-0"
-                title="다운로드"
-              >
-                <Download className="w-5 h-5" />
-              </a>
+              <DownloadButton fileUrl={item.file_url} title={item.title}/>
             </div>
           ))
           ) : (

@@ -6,10 +6,12 @@ import fs from 'fs/promises';
 export async function uploadDocument(formData: FormData) {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const RESOURCE_PATH = process.env.NEXT_PUBLIC_RESOURCE_PATH;
+    const RESOURCE_SERVER = process.env.NEXT_PUBLIC_RESOURCE_URL;
+
     let fileName;
     let size;
 
-    // 1. 웹 서버에서 자체적으로 문서 저장
+    // 1. 웹 서버에서 리소스 서버로 문서 저장
     try{
         const file = formData.get("file") as File;
 
@@ -36,7 +38,7 @@ export async function uploadDocument(formData: FormData) {
         const apiData = {
             title: formData.get("title") as string,
             category: formData.get("category") as string,
-            file_url: `/api/resources/${fileName}`,
+            file_url: `${RESOURCE_SERVER}/${fileName}` as string,
             size: size as string
         }
 

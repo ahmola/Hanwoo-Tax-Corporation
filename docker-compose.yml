@@ -1,24 +1,4 @@
 services:
-  client-web:
-    build:
-      context: ./client-web
-      dockerfile: Dockerfile
-    container_name: client-web
-    ports:
-      - "3000:3000"
-    networks:
-      - service-network
-
-  admin-web:
-    build:
-      context: ./admin-web
-      dockerfile: Dockerfile
-    container_name: admin-web
-    ports:
-      - "3001:3000"
-    networks:
-      - service-network
-
   mysql:
     environment:
       - MYSQL_ROOT_PASSWORD=1234
@@ -40,6 +20,42 @@ services:
       timeout: 5s
       retries: 10
       start_period: 5s
+
+  resource-server:
+    build:
+      context: ./infra/nginx
+      dockerfile: Dockerfile
+    image: nginx:alpine
+    container_name: resource-server
+    ports:
+      - "8000:80"
+    volumes:
+      - ./shared-uploads:/usr/share/nginx/html/resources:ro
+      - ./infra/nginx/conf.d/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - service-network
+
+  client-web:
+    build:
+      context: ./client-web
+      dockerfile: Dockerfile
+    container_name: client-web
+    ports:
+      - "3000:3000"
+    networks:
+      - service-network
+
+  admin-web:
+    build:
+      context: ./admin-web
+      dockerfile: Dockerfile
+    container_name: admin-web
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./shared-uploads:/usr/share/next-resources
+    networks:
+      - service-network
   
   admin-service:
     depends_on:
