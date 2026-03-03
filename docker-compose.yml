@@ -11,6 +11,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
+      - mysql_data:/var/lib/mysql
       - ./server/scripts/sql:/docker-entrypoint-initdb.d
     networks:
       - service-network
@@ -52,8 +53,6 @@ services:
     container_name: admin-web
     ports:
       - "3001:3000"
-    volumes:
-      - ./shared-uploads:/usr/share/next-resources
     networks:
       - service-network
   
@@ -89,6 +88,9 @@ services:
     networks:
       - service-network
   
+volumes:
+  mysql_data:
+
 networks:
   service-network:
     driver: bridge
