@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  nginx.conf: "events { }\nhttp {\n    include       /etc/nginx/mime.types;\n    default_type  application/octet-stream;\n\n    server {\n        listen 80;\n\n        location /resources/ {\n            alias /usr/share/nginx/html/resources/;\n            autoindex off; # 보안을 위해 디렉토리 목록 비활성화\n            \n            # 브라우저가 파일을 다운로드하도록 강제하는 설정\n            if ($request_filename ~* ^.*?\\.(pdf|zip|docx)$ ) {\n                add_header Content-Disposition \"attachment\";\n            }\n            \n            # CORS 설정 (Next.js 도메인에서 접근 허용)\n            add_header 'Access-Control-Allow-Origin' '*';\n        }\n    }\n}"
+kind: ConfigMap
+metadata:
+  annotations:
+    use-subpath: "true"
+  labels:
+    io.kompose.service: resource-server
+  name: resource-server-cm1
