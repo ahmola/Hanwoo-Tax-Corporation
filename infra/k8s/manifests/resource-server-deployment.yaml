@@ -40,9 +40,11 @@ spec:
       restartPolicy: Always
       volumes:
         - name: resource-server-storage
-          hostPath:
-            path: /tmp/shared-uploads
-            type: DirectoryOrCreate
+          persistentVolumeClaim:
+            claimName: resource-server-claim0
+          # hostPath:
+          #   path: /tmp/shared-uploads
+          #   type: DirectoryOrCreate
         - configMap:
             items:
               - key: nginx.conf

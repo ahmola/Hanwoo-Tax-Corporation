@@ -24,7 +24,14 @@ spec:
         - image: hanwoo-client-web:latest
           imagePullPolicy: Never          
           name: client-web
+          volumeMounts:
+          - name: resource-server-storage
+            mountPath: /usr/share/next-resources
           ports:
             - containerPort: 3000
               protocol: TCP
       restartPolicy: Always
+      volumes:
+        - name: resource-server-storage
+          persistentVolumeClaim:
+            claimName: resource-server-claim0

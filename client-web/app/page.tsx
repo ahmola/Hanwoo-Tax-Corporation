@@ -6,10 +6,13 @@ import HeroForm from "@/features/hero/HeroForm";
 import LocationForm from "@/features/location/LocationForm";
 import NoticeForm from "@/features/notice/NoticeForm";
 import ServiceForm from "@/features/servicees/ServiceForm";
+import { countVisitor } from "./actions/visitActions";
 
 export const dynamic = 'force-dynamic';
 
-export default function Home() {
+export default async function Home() {
+  await countVisitor();
+
   return (
     <div className="flex flex-col gap-20 pb-20">
       {/* Hero Section */}

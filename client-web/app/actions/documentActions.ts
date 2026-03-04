@@ -20,11 +20,15 @@ export async function getDocumentsInfo(): Promise<DocumentItem[]> {
             throw new Error(`Failed to fetch documents: ${res.status}`);
         }
         
-        const data = await res.json();
+        const rawData = await res.json();
+        console.log("Raw Data: ", JSON.stringify(rawData, null, 2));
 
-        console.log("Data: ", JSON.stringify(data, null, 2));
+        const items = rawData.map((item: any) => ({
+            ...item,
+            date: item.created_at.split('T')[0]
+        }));
 
-        return data;
+        return items;
     } catch (error) {
         console.error("Document API Error:", error);
         return [];

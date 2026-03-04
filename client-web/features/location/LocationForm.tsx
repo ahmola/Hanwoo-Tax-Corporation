@@ -10,7 +10,7 @@ export default function LocationForm() {
     libraries: ["clusterer", "drawing", "services"],
   });
 
-  // 회사 좌표 (한우세무법인 동대문점 실제 좌표로 수정 필요)
+  // 회사 좌표
   const center = { lat: 37.561845136152115, lng: 127.0143830997867 }; 
 
   return (

@@ -11,7 +11,7 @@ export async function uploadDocument(formData: FormData) {
     let fileName;
     let size;
 
-    // 1. 웹 서버에서 리소스 서버로 문서 저장
+    // 1. 리소스 서버로 문서 저장
     try{
         const file = formData.get("file") as File;
 
