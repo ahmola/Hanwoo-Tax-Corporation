@@ -24,6 +24,9 @@ spec:
         - image: hanwoo-admin-web:latest
           imagePullPolicy: Never          
           name: admin-web
+          # env:
+          #   - name: VISIT_FILE
+          #     value: "'/usr/share/next-resources/visitor_count.json'"
           volumeMounts:
             - name: resource-server-storage
               mountPath: /usr/share/next-resources

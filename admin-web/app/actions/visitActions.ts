@@ -1,16 +1,21 @@
+'use server'
+
 import fs from 'fs/promises';
+import { unstable_noStore as noStore } from 'next/cache';
+
+const VISIT_FILE = process.env.VISIT_FILE || '/usr/share/next-resources/visitor_count.json';
 
 export async function getVisitorCount() {
-  try {
-    const VISIT_FILE = process.env.VISIT_FILE;
+  noStore();
+
+  try {    
+    console.log("Reading Visitor JSON File...")
     const content = await fs.readFile(`${VISIT_FILE}`, 'utf-8');
     const data = JSON.parse(content);
 
     console.log("Visit Data: ", data);
-    
-    // 오늘 날짜인지 체크 후 반환
-    const today = new Date().toISOString().split('T')[0];
-    return data
+
+    return data.count;
   } catch (e) {
     return 0;
   }

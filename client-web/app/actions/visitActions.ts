@@ -1,7 +1,8 @@
+'use server'
 import fs from 'fs/promises';
 import path from 'path';
 
-const VISIT_FILE = process.env.VISIT_FILE
+const VISIT_FILE = process.env.VISIT_FILE || '/usr/share/next-resources/visitor_count.json'
 
 export async function countVisitor() {
     try{
@@ -21,11 +22,13 @@ export async function countVisitor() {
             console.log("방문자 카운트 파일 생성: ", initialData)
             // 파일 생성
             await fs.writeFile(`${VISIT_FILE}`, initialData);
+
         }
 
         // json 파일 읽음
         const content = await fs.readFile(`${VISIT_FILE}`, 'utf-8');
         data = JSON.parse(content);
+        console.log("방문자 카운트 파일 읽음: ", data)
 
         // 매일 초기화
         if (data.date !== today) {
@@ -34,8 +37,14 @@ export async function countVisitor() {
             data.count += 1;
         }
 
+        console.log("방문자 카운트: ", data);
+
         // json 파일 업데이트
-        await fs.writeFile(`${VISIT_FILE}`, JSON.stringify(data));
+        try {
+            await fs.writeFile(`${VISIT_FILE}`, JSON.stringify(data));
+        } catch(error){
+            console.log("방문자 카운트 업데이트 에러: ", error)
+        }
     }catch(error) {
         console.log("방문자 카운트 에러: ", error)
     }

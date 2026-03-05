@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import VisitForm from "@/features/visits/VisitForm"
 
 export default function AdminDashboard() {
@@ -13,6 +16,7 @@ export default function AdminDashboard() {
         </div>
         
         <VisitForm />
+
         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
           <h3 className="text-slate-500 text-sm font-semibold">서버 상태</h3>
           <p className="text-3xl font-bold text-green-600 mt-2">정상</p>
