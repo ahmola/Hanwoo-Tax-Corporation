@@ -86,9 +86,7 @@
 
 ### k8s 도입 이유
 
-- 향후 확장성과 안정성
-
-- 서비스 분리
+- 확장성과 안정성, 특히나 파드 리커버리를 통해서 서비스 다운 시 자동 재시작이 가능
 
 - 복잡한 MSA 인프라를 한번에 해결 가능(Gateway, Load Balancer, Service Discovery, Service Mesh 등)
 
