@@ -68,11 +68,15 @@
 
 - Database: MySQL
 
-- Infra: Docker, Nginx, Kubernetes
+- Infra: Docker, Git, Nginx, Kubernetes
 
 - External API: Kakao Map API, Resend API
 
 - Cloud: AWS EC2
+
+- AI: Gemini Pro & Copilot, Chat GPT
+
+- Project Manager: Jira
 
 ### Go (Gin)를 선택한 이유
 
