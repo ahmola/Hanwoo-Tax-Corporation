@@ -54,7 +54,7 @@
 
 파일 업로드는 nginx static server로 분리하여 처리했습니다.
 
-![img](architecture_diagram.png)
+![img](architecture.png)
 
 ## Tech Stack
 
