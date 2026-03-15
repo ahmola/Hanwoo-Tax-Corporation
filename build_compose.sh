@@ -1,6 +1,6 @@
 docker compose -f docker-compose.yml down -v
 
-docker rm -f $(docker ps -aq)
+# docker rm -f $(docker ps -aq)
 
 docker compose -f docker-compose.yml build --no-cache
 

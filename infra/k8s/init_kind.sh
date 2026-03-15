@@ -1,6 +1,6 @@
 # root 디렉터리에서 path 시작
 # 1. kind-config 작성 필요
-kind create cluster --config ./infra/k8s/ind-config.yaml
+kind create cluster --config ./infra/k8s/kind-config.yaml
 
 # 2. nginx-ingress를 kind 내에 설치
 sh ./infra/k8s/ingress_download.sh
@@ -35,10 +35,10 @@ docker exec -it kind-control-plane crictl pull mysql:8.2.0
 kompose convert -f docker-compose.yml
 # imagePullPolicy 설정 추가
 sed -i '/image: /a \ 
-imagePullPolicy: Never' ./manifests/*-deployment.yaml
+imagePullPolicy: Never' ./infra/k8s/manifests/*-deployment.yaml
 
 # 6. kind cluster에 manifests 적용
-kubectl apply -f ./manifests/
+kubectl apply -f ./infra/k8s/manifests
 
 # 7. 상태 확인
 kubectl get pods -w
